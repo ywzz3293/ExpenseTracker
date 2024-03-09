@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import SwiftUICharts
 
 struct ContentView: View {
+    @EnvironmentObject var transactionListVM:TransactionListViewModel
+    //var demoData: [Double] = [8, 2, 4, 6, 12, 9, 2]
+    
     var body: some View {
         NavigationView{
             ScrollView{
@@ -16,6 +20,15 @@ struct ContentView: View {
                         .font(.title2)
                         .bold()
                     
+                    let data = transactionListVM.accumulateTransaction()
+                    
+                    if !data.isEmpty
+                    {
+                        let totalExpenses = data.map { $0.1 }
+                        LineView(data: totalExpenses)
+                            .frame(height: 300)
+                    }
+
                     RecentTransactionList()
                 }
                 .padding()
@@ -32,6 +45,7 @@ struct ContentView: View {
             }
         }
         .navigationViewStyle(.stack)
+        .accentColor(.primary)
     }
 }
 
